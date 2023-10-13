@@ -9,17 +9,17 @@ class MyTheme{
   static const Color accentColor=Color(0xffDFECDB);
   static const Color darkAccentColor=Color(0xff060E1E);
 
+  static const TextStyle appBarTextStyle= TextStyle(
+      fontSize: 22, fontWeight: FontWeight.bold,color: Colors.white
+  );
+  static const TextStyle bottomSheetBlack= TextStyle(
+      fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black
+  );
   static const TextStyle titleTextStyle= TextStyle(
       fontSize: 18, fontWeight: FontWeight.bold,color: primaryColor
   );
   static const TextStyle titleTimeTextStyle= TextStyle(
       fontSize: 12,color: darkGrayColor
-  );
-  static const TextStyle bottomSheetBlack= TextStyle(
-      fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black
-  );
-  static const TextStyle bottomSheetGray= TextStyle(
-      fontSize: 18, fontWeight: FontWeight.bold,color: grayColor
   );
 
   static ThemeData light=ThemeData(
@@ -28,10 +28,7 @@ class MyTheme{
     appBarTheme: AppBarTheme(
       backgroundColor: primaryColor,
       elevation: 0,
-      titleTextStyle: TextStyle(
-        color: Colors.white,fontWeight: FontWeight.bold,
-        fontSize: 22
-    )
+      titleTextStyle: appBarTextStyle
   ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
