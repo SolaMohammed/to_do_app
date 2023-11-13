@@ -1,29 +1,41 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_app/firebase_utils.dart';
+import 'package:to_do_app/providers/list_provider.dart';
 import 'package:to_do_app/theme.dart';
 
+import '../../../models/task.dart';
 import '../../widgets/to_do_item.dart';
 
-class ListTab extends StatelessWidget {
+class ListTab extends StatefulWidget {
+  @override
+  State<ListTab> createState() => _ListTabState();
+}
 
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height*0.15,
-          child: Stack(
-           children: [
-             Column(
-               children: [
-                 Expanded(
-                     flex: 6,
-                     child: Container(color: MyTheme.primaryColor,)),
-                 Expanded(
-                     flex: 4,
-                     child: Container(color: MyTheme.accentColor,)),
-               ],
-             ),
-             CalendarTimeline(
+class _ListTabState extends State<ListTab> {
+Widget build(BuildContext context) {
+  ListProvider listProvider=Provider.of(context);
+  if(listProvider.tasksList.isEmpty)
+    listProvider.getAllTasksFromFireStore();
+  return Column(
+    children: [
+      Container(
+        height: MediaQuery.of(context).size.height*0.15,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                    flex: 3,
+                    child: Container(color: MyTheme.primaryColor,)),
+                Expanded(
+                    flex: 7,
+                    child: Container(color: MyTheme.accentColor,)),
+              ],
+            ),
+            CalendarTimeline(
               initialDate: DateTime.now(),
               firstDate: DateTime.now().subtract(Duration(days: 365)),
               lastDate:  DateTime.now().add(Duration(days: 365)),
@@ -37,17 +49,20 @@ class ListTab extends StatelessWidget {
               locale: 'en_ISO',
               //showYears: true,
             ),
+          ],
+        ),
+      ),
+      Expanded(
+        child: ListView.builder(
+          itemBuilder: (context, index) => ToDoItem(
+            task: listProvider.tasksList[index],
+          ),
+          itemCount: listProvider.tasksList.length,
+        ),
+      ),
     ],
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemBuilder: (context, index) => ToDoItem(),
-            itemCount: 10,
-          ),
-        ),
-      ],
-    );
+  );
 
-  }
+}
+
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../../models/task.dart';
 import '../../theme.dart';
 
 class ToDoItem extends StatelessWidget {
+  Task task;
+  ToDoItem({required this.task});
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20),
@@ -44,10 +47,10 @@ class ToDoItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("play basketball",
+                            Text(task.title??'',
                                 style: MyTheme.titleTextStyle),
                             SizedBox(height: 10),
-                            Text("Description",
+                            Text(task.description??'',
                                 style: MyTheme.titleTimeTextStyle),
                           ],
                         ),
