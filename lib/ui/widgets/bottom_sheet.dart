@@ -33,6 +33,12 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
                 child: Column(
                   children: [
                     TextFormField(
+                      validator: (value) {
+                        if(value==null||value.isEmpty){
+                          return "Please enter your task";
+                        }
+                        return null;
+                      },
                       onChanged: (value) {
                         title=value;
                       },
@@ -42,6 +48,12 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
                       ),
                     ),
                     TextFormField(
+                      validator: (value) {
+                        if(value==null||value.isEmpty){
+                          return "Please enter your description";
+                        }
+                        return null;
+                      },
                       onChanged: (value) {
                         description=value;
                       },
@@ -69,7 +81,9 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
                 ),
               ),
               ElevatedButton(
-                  onPressed:() => Navigator.pop(context),
+                  onPressed:() {
+                    addTask();
+                  },
                   child:Text("Add",
                     style: MyTheme.titleTextStyle.copyWith(color: Colors.white)
                     ,)
@@ -90,18 +104,27 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
       setState(() {});
   }
   void addTask(){
-    Task task = Task(
-      title: title,
-      description:description,
-      dateTime:selectedDate
-    );
-    FirebaseUtils.addTaskToFireStore(task).timeout(
-        Duration(milliseconds: 500),
-      onTimeout: () {
-          print("task added");
-          listProvider.getAllTasksFromFireStore();
-          Navigator.pop(context);
-        }
-    );
+    if(formKey.currentState?.validate()==true) {
+      //add task to firestore
+      Task task = Task(
+          title: title,
+          description: description,
+          dateTime: selectedDate
+      );
+      FirebaseUtils.addTaskToFireStore(task).timeout(
+          Duration(milliseconds: 500),
+          onTimeout: () {
+            print("task added");
+            listProvider.refreshTasks();
+            Navigator.pop(context);
+          }
+      );
+      setState(() {
+
+      });
+    }
+
   }
+
+
 }

@@ -17,8 +17,8 @@ class ListTab extends StatefulWidget {
 class _ListTabState extends State<ListTab> {
 Widget build(BuildContext context) {
   ListProvider listProvider=Provider.of(context);
-  if(listProvider.tasksList.isEmpty)
-    listProvider.getAllTasksFromFireStore();
+  //if(listProvider.tasksList.isEmpty)
+    listProvider.refreshTasks();
   return Column(
     children: [
       Container(
@@ -36,10 +36,13 @@ Widget build(BuildContext context) {
               ],
             ),
             CalendarTimeline(
-              initialDate: DateTime.now(),
+              initialDate: listProvider.selectedDate,
               firstDate: DateTime.now().subtract(Duration(days: 365)),
               lastDate:  DateTime.now().add(Duration(days: 365)),
-              onDateSelected: (date) => print(date),
+              onDateSelected: (date) {
+                listProvider.selectedDate=date;
+                listProvider.refreshTasks();
+              },
               leftMargin: 20,
               monthColor: MyTheme.primaryColor,
               dayColor: Colors.black,

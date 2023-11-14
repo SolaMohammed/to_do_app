@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_app/firebase_utils.dart';
+import 'package:to_do_app/providers/list_provider.dart';
 
 import '../../models/task.dart';
 import '../../theme.dart';
@@ -8,6 +11,7 @@ class ToDoItem extends StatelessWidget {
   Task task;
   ToDoItem({required this.task});
   Widget build(BuildContext context) {
+    var provider=Provider.of<ListProvider>(context);
     return Container(
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -19,7 +23,14 @@ class ToDoItem extends StatelessWidget {
           motion: StretchMotion(),
            children: [
              SlidableAction(
-               onPressed: (context) {},
+               onPressed: (context) {
+                 FirebaseUtils.delete(task).timeout(
+                 Duration(milliseconds: 500),
+                  onTimeout: (){
+                    provider.refreshTasks();
+                  }
+                 );
+               },
                backgroundColor: MyTheme.redColor ,
                foregroundColor: Colors.white,
                icon: Icons.delete,

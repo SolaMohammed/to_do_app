@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Task {
+  static String collectionName="tasks";
+
   String? id;
   String? title;
   String? description;
